@@ -16,3 +16,7 @@ It also adds context menus to Java projects and Java files.
 
 We can provide command line arguments for a Java project or even a single Java file.
 ![Dialog for Arguments](runargs-dialog.png "Dialog for Arguments")
+
+## NetBeans Plugin Portal
+This plugin is available at NetBeans Plugin portal at
+URL: http://plugins.netbeans.org/plugin/53855/?show=true
