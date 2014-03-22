@@ -1,4 +1,4 @@
-nbrunwithargs
+Run with Arguments plugin for NetBeans IDE 8.0
 =============
 
 NetBeans Plugin providing Run with Arguments command to Java projects
