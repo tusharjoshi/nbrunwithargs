@@ -7,6 +7,14 @@ NetBeans Plugin providing Run with Arguments command to Java projects
 NetBeans IDE 8.0 and above
 
 ## Installation
+
+### From NetBeans Plugin Portal
+1. Open Tools > Plugins dialog box in NetBeans IDE 8.0
+1. Navitage to the Available Plugins tab
+1. Press the Check for Newest button to make sure you have latest list of plugins
+1. Locate the Run With Arguments plugin and Install it using Install button
+
+### From GITHUB site
 Download the latest release NBM from releases and install using Plugin Manager dialog box.
 
 ## Working
