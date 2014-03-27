@@ -46,55 +46,65 @@ import org.openide.util.WeakListeners;
  */
 @ActionID(
         category = "Build",
-        id = "com.tusharjoshi.runargs.RunProjectAction"
+        id = "com.tusharjoshi.runargs.DebugProjectAction"
 )
-@ActionRegistration(displayName = "#CTL_RunProjectAction", lazy = false)
+@ActionRegistration(displayName = "#CTL_DebugProjectAction", lazy = false)
 @ActionReferences({
-    @ActionReference(path = "Menu/BuildProject", position = 0),
-    @ActionReference(path = "Projects/Actions", position = 0),    
-    @ActionReference(path = "Shortcuts", name = "D-S-R")
+    @ActionReference(path = "Menu/Debug", position = 0),
+    @ActionReference(path = "Projects/Actions", position = 10),    
+    @ActionReference(path = "Shortcuts", name = "D-S-D")
 })
 @NbBundle.Messages({
-    "CTL_RunProjectAction=Run with Arguments"})
-public class RunProjectAction extends AbstractAction 
-implements ContextAwareAction, LookupListener {   
+    "CTL_DebugProjectAction=Debug with Arguments"})
+public class DebugProjectAction extends AbstractAction 
+implements ContextAwareAction {   
 
     private Project project;
     
     private Lookup.Result<Project> result;
     
     private Lookup lkp;
+    
+    private final LookupListener listener = new DebugLookupListener();
 
     @Override
     public Action createContextAwareInstance(Lookup lkp) {
-        return new RunProjectAction(lkp);
+        return new DebugProjectAction(lkp);
     }
     
-    public RunProjectAction() {
+    public DebugProjectAction() {
         this(Utilities.actionsGlobalContext());
     }
 
-    public RunProjectAction(final Lookup lkp) {
+    public DebugProjectAction(final Lookup lkp) {
 
         this.lkp = lkp;        
         this.result = lkp.lookupResult(Project.class);
         this.result.addLookupListener(
-                WeakListeners.create(LookupListener.class, this, this.result));
+                WeakListeners.create(LookupListener.class, listener, this.result));
         
         putValue(DynamicMenuContent.HIDE_WHEN_DISABLED, true);        
-        putValue(ACCELERATOR_KEY, Utilities.stringToKey("D-S-R"));
+        putValue(ACCELERATOR_KEY, Utilities.stringToKey("D-S-D"));
 
-        resultChanged(null);
+        lookupChanged();
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
         
-        new AntCommandHandler().runProject(project);
+        new AntCommandHandler().debugProject(project);
+    }
+    
+    private class DebugLookupListener implements LookupListener {
+
+        @Override
+        public void resultChanged(LookupEvent ev) {
+            lookupChanged();
+        }
+        
     }
 
-    @Override
-    public final void resultChanged(LookupEvent le) {
+    public final void lookupChanged() {
         project = AntCommandHandler.findProject( lkp);
         
         String projectName = "";
@@ -107,7 +117,8 @@ implements ContextAwareAction, LookupListener {
         }
             
         putValue(NAME, Bundle.MSG_INPUT_TITLE(projectName, 
-                Constants.COMMAND_RUN_NAME));
-        setEnabled(enableMenu);
+                Constants.COMMAND_DEBUG_NAME));
+        //setEnabled(enableMenu);
+        setEnabled(true);
     }    
 }

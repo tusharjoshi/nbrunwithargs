@@ -23,35 +23,24 @@
  */
 package com.tusharjoshi.runargs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
-import org.openide.awt.ActionRegistration;
-import org.openide.loaders.DataObject;
-import org.openide.util.NbBundle.Messages;
+/**
+ *
+ * @author Tushar Joshi
+ */
+public final class Constants {
 
-@ActionID(
-        category = "Build",
-        id = "com.tusharjoshi.runargs.RunFileAction"
-)
-@ActionRegistration(
-        displayName = "#CTL_RunFileAction"
-)
-@ActionReference(path = "Loaders/text/x-java/Actions", position = 910)
-@Messages("CTL_RunFileAction=Run File with Arguments")
-public final class RunFileAction implements ActionListener {
+    public static final String APPLICATION_ARGS = "application.args"; // NOI18N
+    public static final String COMMAND_RUN = "run"; // NOI18N
+    public static final String COMMAND_DEBUG = "debug"; // NOI18N
+    public static final String COMMAND_RUN_NAME = "Run"; // NOI18N
+    public static final String COMMAND_DEBUG_NAME = "Debug"; // NOI18N
+    public static final String BUILD_XML = "build.xml"; // NOI18N 
     
-    private final DataObject dataObject;
-
-    public RunFileAction(DataObject dataObject) {
-        this.dataObject = dataObject;        
+    public static final String J2SEPROJECT = 
+            "org.netbeans.modules.java.j2seproject.J2SEProject"; // NOI18N 
+    
+    private Constants() {
+        //utility class
     }
-
-    @Override
-    public void actionPerformed(ActionEvent ev) {
-        
-        new AntCommandHandler().runFile(dataObject);
-        
-    }
+    
 }

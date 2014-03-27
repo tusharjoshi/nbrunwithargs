@@ -23,9 +23,18 @@
  */
 package com.tusharjoshi.runargs;
 
+import static com.tusharjoshi.runargs.Constants.APPLICATION_ARGS;
+import static com.tusharjoshi.runargs.Constants.BUILD_XML;
+import static com.tusharjoshi.runargs.Constants.COMMAND_DEBUG;
+import static com.tusharjoshi.runargs.Constants.COMMAND_DEBUG_NAME;
+import static com.tusharjoshi.runargs.Constants.COMMAND_RUN;
+import static com.tusharjoshi.runargs.Constants.COMMAND_RUN_NAME;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Properties;
 import org.apache.tools.ant.module.api.support.ActionUtils;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.java.classpath.ClassPath;
 import org.netbeans.api.java.source.SourceUtils;
 import org.netbeans.api.project.FileOwnerQuery;
@@ -34,7 +43,6 @@ import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.api.project.ProjectUtils;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.execution.ExecutorTask;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
@@ -48,15 +56,37 @@ import org.openide.util.NbBundle;
 @NbBundle.Messages({
     "MSG_INPUT_TEXT=Enter command line arguments:",
     "# {0} - Project name",
-    "MSG_INPUT_TITLE=Run{0} with Arguments"
+    "# {1} - Command",
+    "MSG_INPUT_TITLE={1}{0} with Arguments"
 })
-public class AntCommandHandler {
-
-    private static final String APPLICATION_ARGS = "application.args"; // NOI18N
-    private static final String COMMAND_RUN = "run"; // NOI18N
-    private static final String BUILD_XML = "build.xml"; // NOI18N 
+public class AntCommandHandler { 
     
     public void runProject(Project project) {
+        projectAction(project, COMMAND_RUN);
+    }
+    
+    public void debugProject(Project project) {
+        projectAction(project, COMMAND_DEBUG);
+    }
+    
+    private String getCommandName(@NonNull final String command) {
+        switch (command) {
+            case COMMAND_RUN:
+                return COMMAND_RUN_NAME;
+            case COMMAND_DEBUG:
+                return COMMAND_DEBUG_NAME;
+            default:
+                return "";
+        }
+    }
+    
+    public void projectAction(@NullAllowed final Project project, 
+            @NonNull final String command) {
+        
+        if( null == project ) {
+            return;
+        }
+        
         PropertyHandler propertiesHandler
                 = PropertyHandler.createPrivatePropertiesHandler(project);
 
@@ -65,7 +95,7 @@ public class AntCommandHandler {
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
-                        Bundle.MSG_INPUT_TITLE(getProjectName(project)));
+                        Bundle.MSG_INPUT_TITLE(getProjectName(project),getCommandName(command)));
         inputLine.setInputText(inputText);
         Object resultOption = DialogDisplayer.getDefault().notify(
                 inputLine);
@@ -88,19 +118,30 @@ public class AntCommandHandler {
         FileObject fileObject = projectDirectory.getFileObject(BUILD_XML);
 
         try {
-            ActionUtils.runTarget(fileObject, new String[]{COMMAND_RUN}, properties);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (IllegalArgumentException ex) {
+            ActionUtils.runTarget(fileObject, new String[]{command}, properties);
+        } catch (IOException | IllegalArgumentException ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+    
+    public void runFile(DataObject dataObject) {
+        fileAction(dataObject, COMMAND_RUN);
+    }
+    
+    public void debugFile(DataObject dataObject) {
+        fileAction(dataObject, COMMAND_DEBUG);
     }
     
     @NbBundle.Messages({
         "# {0} - Class name",
         "LBL_No_Main_Classs_Found=Class \"{0}\" does not have a main method."
     })
-    public void runFile(DataObject dataObject) {
+    public void fileAction(@NullAllowed final DataObject dataObject, 
+            @NonNull final String command) {
+        
+        if( null == dataObject ) {
+            return;
+        }
         
         Project project = findProject(dataObject);
         if( null == project ) {
@@ -127,7 +168,7 @@ public class AntCommandHandler {
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
-                        Bundle.MSG_INPUT_TITLE(" " + resourceName));
+                        Bundle.MSG_INPUT_TITLE(" " + resourceName,getCommandName(command)));
         inputLine.setInputText(inputText);
         Object resultOption = DialogDisplayer.getDefault().notify(
                 inputLine);
@@ -153,13 +194,15 @@ public class AntCommandHandler {
         projectProperties.setProperty("main.class", resourceName);
 
         try {
-            ExecutorTask task = ActionUtils.runTarget(fileObject, new String[]{COMMAND_RUN}, properties);
-            task.waitFinished();
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (IllegalArgumentException ex) {
+            ActionUtils.runTarget(fileObject, new String[]{command}, properties);
+        } catch (IOException | IllegalArgumentException ex) {
             Exceptions.printStackTrace(ex);
         } finally {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+            }
             projectProperties.setProperty("main.class", oldMainClass);
         }
     }
@@ -178,13 +221,20 @@ public class AntCommandHandler {
     }
     
     public static Project findProject(Lookup lkp) {
-        
+        printLookupObjects(lkp);
         DataObject dataObject = lkp.lookup(DataObject.class);
         if( null != dataObject ) {
             return findProject(dataObject);
         }
                 
         return null;
+    }
+    
+    private static void printLookupObjects(Lookup lkp) {
+        Collection<? extends Object> allObjects = lkp.lookupAll(Object.class);
+        for(Object obj : allObjects) {
+            System.out.println(""+ obj.getClass().getName());
+        }
     }
     
     public static Project findProject(DataObject dataObject) {

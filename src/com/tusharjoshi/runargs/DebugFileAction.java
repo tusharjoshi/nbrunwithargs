@@ -33,25 +33,25 @@ import org.openide.util.NbBundle.Messages;
 
 @ActionID(
         category = "Build",
-        id = "com.tusharjoshi.runargs.RunFileAction"
+        id = "com.tusharjoshi.runargs.DebugFileAction"
 )
 @ActionRegistration(
-        displayName = "#CTL_RunFileAction"
+        displayName = "#CTL_DebugFileAction"
 )
-@ActionReference(path = "Loaders/text/x-java/Actions", position = 910)
-@Messages("CTL_RunFileAction=Run File with Arguments")
-public final class RunFileAction implements ActionListener {
+@ActionReference(path = "Loaders/text/x-java/Actions", position = 920)
+@Messages("CTL_DebugFileAction=Debug File with Arguments")
+public final class DebugFileAction implements ActionListener {
     
     private final DataObject dataObject;
 
-    public RunFileAction(DataObject dataObject) {
+    public DebugFileAction(DataObject dataObject) {
         this.dataObject = dataObject;        
     }
 
     @Override
     public void actionPerformed(ActionEvent ev) {
         
-        new AntCommandHandler().runFile(dataObject);
+        new AntCommandHandler().debugFile(dataObject);
         
     }
 }
