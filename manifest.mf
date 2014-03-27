@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 AutoUpdate-Show-In-Client: true
 OpenIDE-Module: com.tusharjoshi.runargs/1
 OpenIDE-Module-Localizing-Bundle: com/tusharjoshi/runargs/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.2.0
+OpenIDE-Module-Specification-Version: 2.0
 
