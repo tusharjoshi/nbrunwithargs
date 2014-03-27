@@ -24,21 +24,15 @@
 package com.tusharjoshi.runargs;
 
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
-import org.netbeans.api.project.Project;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
-import org.openide.awt.DynamicMenuContent;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
-import org.openide.util.WeakListeners;
 
 /**
  *
@@ -56,58 +50,25 @@ import org.openide.util.WeakListeners;
 })
 @NbBundle.Messages({
     "CTL_RunProjectAction=Run with Arguments"})
-public class RunProjectAction extends AbstractAction 
-implements ContextAwareAction, LookupListener {   
-
-    private Project project;
-    
-    private Lookup.Result<Project> result;
-    
-    private Lookup lkp;
+public class RunProjectAction extends ProjectAction 
+implements ContextAwareAction {   
 
     @Override
     public Action createContextAwareInstance(Lookup lkp) {
-        return new RunProjectAction(lkp);
+        return new RunProjectAction(lkp, Constants.COMMAND_RUN_NAME, "D-S-R");
     }
     
     public RunProjectAction() {
-        this(Utilities.actionsGlobalContext());
+        super(Utilities.actionsGlobalContext(), Constants.COMMAND_RUN_NAME, "D-S-R");
     }
-
-    public RunProjectAction(final Lookup lkp) {
-
-        this.lkp = lkp;        
-        this.result = lkp.lookupResult(Project.class);
-        this.result.addLookupListener(
-                WeakListeners.create(LookupListener.class, this, this.result));
-        
-        putValue(DynamicMenuContent.HIDE_WHEN_DISABLED, true);        
-        putValue(ACCELERATOR_KEY, Utilities.stringToKey("D-S-R"));
-
-        resultChanged(null);
+    
+    public RunProjectAction(final Lookup lkp, String commandName, String accKey) {
+        super(lkp,commandName, accKey);
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
         
-        new AntCommandHandler().runProject(project);
-    }
-
-    @Override
-    public final void resultChanged(LookupEvent le) {
-        project = AntCommandHandler.findProject( lkp);
-        
-        String projectName = "";
-        boolean enableMenu = false;
-        
-        if( null != project && Constants.J2SEPROJECT
-                .equals(project.getClass().getName()) ) {
-            projectName = AntCommandHandler.getProjectName(project);
-            enableMenu = true;
-        }
-            
-        putValue(NAME, Bundle.MSG_INPUT_TITLE(projectName, 
-                Constants.COMMAND_RUN_NAME));
-        setEnabled(enableMenu);
-    }    
+        new AntCommandHandler().runProject(getProject());
+    } 
 }

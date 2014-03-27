@@ -50,75 +50,31 @@ import org.openide.util.WeakListeners;
 )
 @ActionRegistration(displayName = "#CTL_DebugProjectAction", lazy = false)
 @ActionReferences({
-    @ActionReference(path = "Menu/Debug", position = 0),
+    @ActionReference(path = "Menu/RunProject", position = 0),
     @ActionReference(path = "Projects/Actions", position = 10),    
     @ActionReference(path = "Shortcuts", name = "D-S-D")
 })
 @NbBundle.Messages({
     "CTL_DebugProjectAction=Debug with Arguments"})
-public class DebugProjectAction extends AbstractAction 
-implements ContextAwareAction {   
-
-    private Project project;
-    
-    private Lookup.Result<Project> result;
-    
-    private Lookup lkp;
-    
-    private final LookupListener listener = new DebugLookupListener();
+public class DebugProjectAction extends ProjectAction 
+implements ContextAwareAction { 
 
     @Override
     public Action createContextAwareInstance(Lookup lkp) {
-        return new DebugProjectAction(lkp);
+        return new DebugProjectAction(lkp, Constants.COMMAND_DEBUG_NAME, "D-S-D");
+    }
+    
+    public DebugProjectAction(final Lookup lkp, String commandName, String accKey) {
+        super(lkp,commandName, accKey);
     }
     
     public DebugProjectAction() {
-        this(Utilities.actionsGlobalContext());
-    }
-
-    public DebugProjectAction(final Lookup lkp) {
-
-        this.lkp = lkp;        
-        this.result = lkp.lookupResult(Project.class);
-        this.result.addLookupListener(
-                WeakListeners.create(LookupListener.class, listener, this.result));
-        
-        putValue(DynamicMenuContent.HIDE_WHEN_DISABLED, true);        
-        putValue(ACCELERATOR_KEY, Utilities.stringToKey("D-S-D"));
-
-        lookupChanged();
+        super(Utilities.actionsGlobalContext(), Constants.COMMAND_DEBUG_NAME, "D-S-D");
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
         
-        new AntCommandHandler().debugProject(project);
+        new AntCommandHandler().debugProject(getProject());
     }
-    
-    private class DebugLookupListener implements LookupListener {
-
-        @Override
-        public void resultChanged(LookupEvent ev) {
-            lookupChanged();
-        }
-        
-    }
-
-    public final void lookupChanged() {
-        project = AntCommandHandler.findProject( lkp);
-        
-        String projectName = "";
-        boolean enableMenu = false;
-        
-        if( null != project && Constants.J2SEPROJECT
-                .equals(project.getClass().getName()) ) {
-            projectName = AntCommandHandler.getProjectName(project);
-            enableMenu = true;
-        }
-            
-        putValue(NAME, Bundle.MSG_INPUT_TITLE(projectName, 
-                Constants.COMMAND_DEBUG_NAME));
-        //setEnabled(enableMenu);
-        setEnabled(true);
-    }    
 }
