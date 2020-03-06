@@ -38,6 +38,10 @@ public final class Constants {
     
     public static final String J2SEPROJECT = 
             "org.netbeans.modules.java.j2seproject.J2SEProject"; // NOI18N 
+    public static final String MAVENPROJECT =
+            "org.netbeans.modules.maven.NbMavenProjectImpl"; // NOI18N
+    public static final String GRADLEPROJECT =
+            "org.netbeans.gradle.project.NbGradleProject"; // NOI18N
     
     private Constants() {
         //utility class
