@@ -85,7 +85,7 @@ public abstract class ProjectAction extends AbstractAction {
     }
 
     private void lookupChanged(String commandName) {
-        project = AntCommandHandler.findProject( lkp);
+        project = CommandHandler.findProject( lkp);
         
         String projectName = "";
         boolean enableMenu = false;
@@ -95,7 +95,7 @@ public abstract class ProjectAction extends AbstractAction {
                 case Constants.J2SEPROJECT:
                 case Constants.MAVENPROJECT:
                 case Constants.GRADLEPROJECT:
-                    projectName = AntCommandHandler.getProjectName(project);
+                    projectName = CommandHandler.getProjectName(project);
                     enableMenu = true;
                     break;
                 default:

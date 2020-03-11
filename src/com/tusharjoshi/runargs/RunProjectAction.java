@@ -25,6 +25,7 @@ package com.tusharjoshi.runargs;
 
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import org.netbeans.api.project.Project;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -68,7 +69,11 @@ implements ContextAwareAction {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        
-        new AntCommandHandler().runProject(getProject());
+        Project project = getProject();
+        CommandHandler commandHandler
+                = CommandHandler.createCommandHandler(project);
+        if (commandHandler != null) {
+            commandHandler.runProject(project);
+        }
     } 
 }

@@ -50,8 +50,10 @@ public final class RunFileAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        
-        new AntCommandHandler().runFile(dataObject);
-        
+        CommandHandler commandHandler
+                = CommandHandler.createCommandHandler(dataObject);
+        if (commandHandler != null) {
+            commandHandler.runFile(dataObject);
+        }
     }
 }

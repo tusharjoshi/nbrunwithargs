@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,22 @@
  */
 package com.tusharjoshi.runargs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
-import org.openide.awt.ActionRegistration;
-import org.openide.loaders.DataObject;
-import org.openide.util.NbBundle.Messages;
+import org.netbeans.api.project.Project;
 
-@ActionID(
-        category = "Build",
-        id = "com.tusharjoshi.runargs.DebugFileAction"
-)
-@ActionRegistration(
-        displayName = "#CTL_DebugFileAction"
-)
-@ActionReference(path = "Loaders/text/x-java/Actions", position = 920)
-@Messages("CTL_DebugFileAction=Debug File with Arguments")
-public final class DebugFileAction implements ActionListener {
-    
-    private final DataObject dataObject;
-
-    public DebugFileAction(DataObject dataObject) {
-        this.dataObject = dataObject;        
+/**
+ *
+ * @author Kevin Kofler
+ */
+public class MavenCommandHandler extends CommandHandler {
+    @Override
+    protected void projectActionImpl(String applicationArgs, Project project,
+            String command) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void actionPerformed(ActionEvent ev) {
-        CommandHandler commandHandler
-                = CommandHandler.createCommandHandler(dataObject);
-        if (commandHandler != null) {
-            commandHandler.debugFile(dataObject);
-        }
+    protected void fileActionImpl(String applicationArgs, Project project,
+            String resourceName, String command) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
