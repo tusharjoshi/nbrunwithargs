@@ -42,6 +42,7 @@ public final class Constants {
             "org.netbeans.modules.maven.NbMavenProjectImpl"; // NOI18N
     public static final String GRADLEPROJECT =
             "org.netbeans.gradle.project.NbGradleProject"; // NOI18N
+    static final String SINGLE_SUFFIX = ".single";
     
     private Constants() {
         //utility class

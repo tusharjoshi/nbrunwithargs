@@ -23,22 +23,66 @@
  */
 package com.tusharjoshi.runargs;
 
+import java.lang.reflect.Method;
+import java.util.Map;
 import org.netbeans.api.project.Project;
+import org.openide.util.Lookup;
 
 /**
  *
  * @author Kevin Kofler
  */
 public class MavenCommandHandler extends CommandHandler {
+    private static final String EXEC_ARGS = "exec.args";
+    private static final String PACKAGE_CLASS_NAME = "packageClassName";
+    private static final String MAIN_SUFFIX = ".main";
+
+    private void actionImpl(String applicationArgs, Project project,
+            String resourceName, String command) throws IllegalStateException {
+        try {
+            Class<? extends Project> projectClass = project.getClass();
+            ClassLoader classLoader = projectClass.getClassLoader();
+            Method createRunConfig = classLoader.loadClass(
+                    "org.netbeans.modules.maven.execute.ActionToGoalUtils")
+                    .getMethod("createRunConfig", String.class, projectClass,
+                            Lookup.class);
+            Object runConfig = createRunConfig.invoke(null, command, project,
+                    project.getLookup());
+            Class<?> runConfigClass = createRunConfig.getReturnType();
+            Class<?> runUtilsClass = classLoader.loadClass(
+                    "org.netbeans.modules.maven.api.execute.RunUtils");
+            Object newRunConfig = runUtilsClass.getMethod("cloneRunConfig",
+                    runConfigClass).invoke(null, runConfig);
+            Map<? extends String,? extends String> properties =
+                    (Map<? extends String,? extends String>) runConfigClass
+                            .getMethod("getProperties").invoke(newRunConfig);
+            String execArgs = properties.get(EXEC_ARGS);
+            System.out.println(execArgs);
+            Method setProperty = runConfigClass.getMethod("setProperty",
+                    String.class, String.class);
+            setProperty.invoke(newRunConfig, EXEC_ARGS,
+                            execArgs + ' ' + applicationArgs);
+            if (resourceName != null) {
+                setProperty.invoke(newRunConfig, PACKAGE_CLASS_NAME,
+                        resourceName);
+            }
+            runUtilsClass.getMethod("run", runConfigClass)
+                    .invoke(null, newRunConfig);
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
     @Override
     protected void projectActionImpl(String applicationArgs, Project project,
             String command) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        actionImpl(applicationArgs, project, null, command);
     }
 
     @Override
     protected void fileActionImpl(String applicationArgs, Project project,
             String resourceName, String command) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        actionImpl(applicationArgs, project, resourceName,
+                command + Constants.SINGLE_SUFFIX + MAIN_SUFFIX);
     }
 }

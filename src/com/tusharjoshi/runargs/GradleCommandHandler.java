@@ -36,7 +36,6 @@ public class GradleCommandHandler extends CommandHandler {
     private static final String CMD_LINE_ARGS_PLACEHOLDER = "${cmd-line-args}";
     private static final String SELECTED_CLASS_PLACEHOLDER
             = "${selected-class}";
-    private static final String SINGLE_SUFFIX = ".single";
 
     private void replacePlaceholder(ArrayList<String> args, String placeholder,
             String replacement) {
@@ -122,6 +121,6 @@ public class GradleCommandHandler extends CommandHandler {
     protected void fileActionImpl(String applicationArgs, Project project,
             String resourceName, String command) {
         actionImpl(applicationArgs, project, resourceName,
-                command + SINGLE_SUFFIX);
+                command + Constants.SINGLE_SUFFIX);
     }
 }
