@@ -24,8 +24,6 @@
  */
 package com.tusharjoshi.runargs;
 
-import static com.tusharjoshi.runargs.Constants.APPLICATION_ARGS;
-import static com.tusharjoshi.runargs.Constants.BUILD_XML;
 import java.io.IOException;
 import java.util.Properties;
 import org.apache.tools.ant.module.api.support.ActionUtils;
@@ -38,6 +36,9 @@ import org.openide.util.Exceptions;
  * @author Tushar Joshi
  */
 public class AntCommandHandler extends CommandHandler { 
+    private static final String APPLICATION_ARGS = "application.args"; // NOI18N
+    private static final String BUILD_XML = "build.xml"; // NOI18N
+
     @Override
     protected void projectActionImpl(String applicationArgs, Project project,
             String command) {
