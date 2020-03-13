@@ -2,6 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -66,27 +67,15 @@ public class AntCommandHandler extends CommandHandler {
          application.args property to pass any arguments.
          */
         properties.put(APPLICATION_ARGS, applicationArgs);
+        properties.put("main.class", resourceName);
 
         FileObject projectDirectory = project.getProjectDirectory();
         FileObject fileObject = projectDirectory.getFileObject(BUILD_XML);
-
-        PropertyHandler projectProperties
-                = PropertyHandler.createProjectPropertiesHandler(project);
-
-        String oldMainClass = projectProperties.getProperty("main.class");
-        projectProperties.setProperty("main.class", resourceName);
 
         try {
             ActionUtils.runTarget(fileObject, new String[]{command}, properties);
         } catch (IOException | IllegalArgumentException ex) {
             Exceptions.printStackTrace(ex);
-        } finally {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-            projectProperties.setProperty("main.class", oldMainClass);
         }
     }
 }
