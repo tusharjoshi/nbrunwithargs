@@ -25,6 +25,7 @@
 package com.tusharjoshi.runargs;
 
 import java.util.Collection;
+import java.util.prefs.Preferences;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -95,11 +96,10 @@ public abstract class CommandHandler {
             return;
         }
 
-        PropertyHandler propertiesHandler
-                = PropertyHandler.createPrivatePropertiesHandler(project);
+        Preferences preferences = ProjectUtils.getPreferences(project,
+                CommandHandler.class, false);
 
-        String inputText;
-        inputText = propertiesHandler.getProperty(Constants.APPLICATION_ARGS);
+        String inputText = preferences.get(Constants.APPLICATION_ARGS, null);
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
@@ -113,7 +113,7 @@ public abstract class CommandHandler {
 
         inputText = inputLine.getInputText();
 
-        propertiesHandler.setProperty(Constants.APPLICATION_ARGS, inputText);
+        preferences.put(Constants.APPLICATION_ARGS, inputText);
 
         projectActionImpl(inputText, project, command);
     }
@@ -154,11 +154,10 @@ public abstract class CommandHandler {
             return;
         }
 
-        PropertyHandler privateProperties
-                = PropertyHandler.createPrivatePropertiesHandler(project);
+        Preferences preferences = ProjectUtils.getPreferences(project,
+                CommandHandler.class, false);
 
-        String inputText;
-        inputText = privateProperties.getProperty(Constants.APPLICATION_ARGS);
+        String inputText = preferences.get(Constants.APPLICATION_ARGS, null);
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
@@ -172,7 +171,7 @@ public abstract class CommandHandler {
 
         inputText = inputLine.getInputText();
 
-        privateProperties.setProperty(Constants.APPLICATION_ARGS, inputText);
+        preferences.put(Constants.APPLICATION_ARGS, inputText);
 
         fileActionImpl(inputText, project, resourceName, command);
     }
