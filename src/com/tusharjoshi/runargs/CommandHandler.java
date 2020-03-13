@@ -52,6 +52,8 @@ import org.openide.util.NbBundle;
     "MSG_INPUT_TITLE={1}{0} with Arguments"
 })
 public abstract class CommandHandler {
+    private final static String ARGS_PROPERTY = "args";
+
     public static CommandHandler createCommandHandler(Project project) {
         switch( project.getClass().getName() ) {
             case Constants.J2SEPROJECT:
@@ -99,7 +101,7 @@ public abstract class CommandHandler {
         Preferences preferences = ProjectUtils.getPreferences(project,
                 CommandHandler.class, false);
 
-        String inputText = preferences.get(Constants.APPLICATION_ARGS, null);
+        String inputText = preferences.get(ARGS_PROPERTY, null);
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
@@ -113,7 +115,7 @@ public abstract class CommandHandler {
 
         inputText = inputLine.getInputText();
 
-        preferences.put(Constants.APPLICATION_ARGS, inputText);
+        preferences.put(ARGS_PROPERTY, inputText);
 
         projectActionImpl(inputText, project, command);
     }
@@ -157,7 +159,7 @@ public abstract class CommandHandler {
         Preferences preferences = ProjectUtils.getPreferences(project,
                 CommandHandler.class, false);
 
-        String inputText = preferences.get(Constants.APPLICATION_ARGS, null);
+        String inputText = preferences.get(ARGS_PROPERTY, null);
 
         NotifyDescriptor.InputLine inputLine
                 = new NotifyDescriptor.InputLine(Bundle.MSG_INPUT_TEXT(),
@@ -171,7 +173,7 @@ public abstract class CommandHandler {
 
         inputText = inputLine.getInputText();
 
-        preferences.put(Constants.APPLICATION_ARGS, inputText);
+        preferences.put(ARGS_PROPERTY, inputText);
 
         fileActionImpl(inputText, project, resourceName, command);
     }
