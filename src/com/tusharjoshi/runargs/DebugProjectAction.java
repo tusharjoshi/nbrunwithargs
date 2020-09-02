@@ -2,6 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +25,16 @@
 package com.tusharjoshi.runargs;
 
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.netbeans.api.project.Project;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
-import org.openide.awt.DynamicMenuContent;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
-import org.openide.util.WeakListeners;
 
 /**
  *
@@ -74,7 +70,11 @@ implements ContextAwareAction {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        
-        new AntCommandHandler().debugProject(getProject());
+        Project project = getProject();
+        CommandHandler commandHandler
+                = CommandHandler.createCommandHandler(project);
+        if (commandHandler != null) {
+            commandHandler.debugProject(project);
+        }
     }
 }

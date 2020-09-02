@@ -1,7 +1,9 @@
 Run with Arguments plugin for NetBeans IDE 8.0
 =============
 
-NetBeans Plugin providing Run with Arguments command to Java projects
+NetBeans Plugin providing Run with Arguments command to Java projects.
+
+Version 3.0 adds support for Maven- and Gradle-based projects.
 
 ## Works with
 NetBeans IDE 8.0 and above

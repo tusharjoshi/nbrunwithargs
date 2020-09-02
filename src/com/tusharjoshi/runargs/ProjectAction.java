@@ -2,6 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -85,15 +86,22 @@ public abstract class ProjectAction extends AbstractAction {
     }
 
     private void lookupChanged(String commandName) {
-        project = AntCommandHandler.findProject( lkp);
+        project = CommandHandler.findProject( lkp);
         
         String projectName = "";
         boolean enableMenu = false;
         
-        if( null != project && Constants.J2SEPROJECT
-                .equals(project.getClass().getName()) ) {
-            projectName = AntCommandHandler.getProjectName(project);
-            enableMenu = true;
+        if( null != project ) {
+            switch( project.getClass().getName() ) {
+                case Constants.J2SEPROJECT:
+                case Constants.MAVENPROJECT:
+                case Constants.GRADLEPROJECT:
+                    projectName = CommandHandler.getProjectName(project);
+                    enableMenu = true;
+                    break;
+                default:
+                    break;
+            }
         }
             
         putValue(NAME, Bundle.MSG_INPUT_TITLE(projectName, 

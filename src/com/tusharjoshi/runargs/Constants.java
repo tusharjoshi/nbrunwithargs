@@ -2,6 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +30,18 @@ package com.tusharjoshi.runargs;
  */
 public final class Constants {
 
-    public static final String APPLICATION_ARGS = "application.args"; // NOI18N
     public static final String COMMAND_RUN = "run"; // NOI18N
     public static final String COMMAND_DEBUG = "debug"; // NOI18N
     public static final String COMMAND_RUN_NAME = "Run"; // NOI18N
     public static final String COMMAND_DEBUG_NAME = "Debug"; // NOI18N
-    public static final String BUILD_XML = "build.xml"; // NOI18N 
     
     public static final String J2SEPROJECT = 
             "org.netbeans.modules.java.j2seproject.J2SEProject"; // NOI18N 
+    public static final String MAVENPROJECT =
+            "org.netbeans.modules.maven.NbMavenProjectImpl"; // NOI18N
+    public static final String GRADLEPROJECT =
+            "org.netbeans.gradle.project.NbGradleProject"; // NOI18N
+    static final String SINGLE_SUFFIX = ".single";
     
     private Constants() {
         //utility class

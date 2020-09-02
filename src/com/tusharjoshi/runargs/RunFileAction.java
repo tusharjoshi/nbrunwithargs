@@ -2,6 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
+ Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -50,8 +51,10 @@ public final class RunFileAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        
-        new AntCommandHandler().runFile(dataObject);
-        
+        CommandHandler commandHandler
+                = CommandHandler.createCommandHandler(dataObject);
+        if (commandHandler != null) {
+            commandHandler.runFile(dataObject);
+        }
     }
 }
