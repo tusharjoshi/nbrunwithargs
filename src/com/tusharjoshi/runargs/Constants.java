@@ -2,7 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
- Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
+ Copyright (c) 2020-2021 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,10 @@ public final class Constants {
             "org.netbeans.modules.java.j2seproject.J2SEProject"; // NOI18N 
     public static final String MAVENPROJECT =
             "org.netbeans.modules.maven.NbMavenProjectImpl"; // NOI18N
-    public static final String GRADLEPROJECT =
+    public static final String GRADLEPLUGINPROJECT =
             "org.netbeans.gradle.project.NbGradleProject"; // NOI18N
+    public static final String GRADLEPROJECT =
+            "org.netbeans.modules.gradle.NbGradleProjectImpl"; // NOI18N
     static final String SINGLE_SUFFIX = ".single";
     
     private Constants() {
