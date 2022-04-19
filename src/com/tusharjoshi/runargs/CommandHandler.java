@@ -2,7 +2,7 @@
  The MIT License (MIT)
 
  Copyright (c) 2014 Tushar Joshi
- Copyright (c) 2020 DAGOPT Optimization Technologies GmbH
+ Copyright (c) 2020-2021 DAGOPT Optimization Technologies GmbH
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -60,6 +60,8 @@ public abstract class CommandHandler {
                 return new AntCommandHandler();
             case Constants.MAVENPROJECT:
                 return new MavenCommandHandler();
+            case Constants.GRADLEPLUGINPROJECT:
+                return new GradlePluginCommandHandler();
             case Constants.GRADLEPROJECT:
                 return new GradleCommandHandler();
             default:
